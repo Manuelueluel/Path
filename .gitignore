@@ -1,0 +1,21 @@
+# Gradle / build
+.gradle/
+.kotlin/
+build/
+local.properties
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Signing
+*.jks
+*.keystore
+
+# Map data and heatmap cache must never be committed (see CLAUDE.md)
+*.mbtiles
+*.rd5

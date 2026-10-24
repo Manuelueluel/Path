@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_back">Indietro</string>
+    <string name="settings_permissions_section">Permessi</string>
+</resources>

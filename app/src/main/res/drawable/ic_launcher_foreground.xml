@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Mountain with a dashed trail: 108dp adaptive canvas, content in the central 66dp safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M28,74 L46,42 L55,56 L62,46 L80,74 Z" />
+    <path
+        android:fillColor="#FF2E6B3F"
+        android:pathData="M46,42 L51,51 L47,49 L43,53 L41.5,51 Z" />
+    <path
+        android:strokeColor="#FFFFB68F"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M34,82 C44,78 50,82 58,77 C64,73 70,76 76,72" />
+</vector>

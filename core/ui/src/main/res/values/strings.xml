@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_allow">Consenti</string>
+    <string name="permission_granted">Consentito</string>
+    <string name="permission_open_settings">Apri impostazioni</string>
+    <string name="permission_permanently_denied">Permesso negato. Puoi attivarlo dalle impostazioni di sistema dell\'app.</string>
+    <string name="permission_location_title">Posizione</string>
+    <string name="permission_location_explanation">Serve per mostrarti sulla mappa e centrarla dove ti trovi. La posizione resta sul telefono: Traccia non la invia a nessuno.</string>
+    <string name="permission_notifications_title">Notifiche</string>
+    <string name="permission_notifications_explanation">Servono per mostrare l\'avanzamento dei download delle mappe offline mentre l\'app è in background.</string>
+</resources>
