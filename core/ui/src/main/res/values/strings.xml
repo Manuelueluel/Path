@@ -5,7 +5,14 @@
     <string name="permission_open_settings">Apri impostazioni</string>
     <string name="permission_permanently_denied">Permesso negato. Puoi attivarlo dalle impostazioni di sistema dell\'app.</string>
     <string name="permission_location_title">Posizione</string>
-    <string name="permission_location_explanation">Serve per mostrarti sulla mappa e centrarla dove ti trovi. La posizione resta sul telefono: Traccia non la invia a nessuno.</string>
+    <string name="permission_location_explanation">Serve per mostrarti sulla mappa e centrarla dove ti trovi. La posizione resta sul telefono: Path non la invia a nessuno.</string>
     <string name="permission_notifications_title">Notifiche</string>
     <string name="permission_notifications_explanation">Servono per mostrare l\'avanzamento dei download delle mappe offline mentre l\'app è in background.</string>
+    <string name="sport_hiking">Escursionismo</string>
+    <string name="sport_trail_running">Trail running</string>
+    <string name="sport_running">Corsa</string>
+    <string name="sport_road_cycling">Bici da strada</string>
+    <string name="sport_gravel">Gravel</string>
+    <string name="sport_mtb">MTB</string>
+    <string name="sport_ski_touring">Scialpinismo</string>
 </resources>

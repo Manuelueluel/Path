@@ -3,4 +3,9 @@
     <string name="settings_title">Impostazioni</string>
     <string name="settings_back">Indietro</string>
     <string name="settings_permissions_section">Permessi</string>
+    <string name="settings_maps_section">Mappe</string>
+    <string name="settings_offline_maps">Mappe offline</string>
+    <string name="settings_offline_maps_description">Scarica le regioni per usare mappa, rilievo e sentieri senza rete</string>
+    <string name="settings_heatmap">Heatmap Strava</string>
+    <string name="settings_heatmap_description">Account Strava e tile della heatmap salvate sul telefono</string>
 </resources>

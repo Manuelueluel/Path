@@ -1,0 +1,37 @@
+# Planetiler custom schema: trail difficulty overlay for the OpenMapTiles basemap.
+# OpenMapTiles has no sac_scale, so it ships as a separate "trails" layer drawn on top of the base paths.
+schema_name: Path trails
+schema_description: Hiking (sac_scale) and MTB difficulty of paths and tracks
+attribution: '<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap contributors</a>'
+is_overlay: true
+args:
+  osm_path:
+    description: Local OSM extract (.osm.pbf)
+    default: data/sources/region.osm.pbf
+  maxzoom: 14
+sources:
+  osm:
+    type: osm
+    local_path: '${ args.osm_path }'
+layers:
+  - id: trails
+    features:
+      - source: osm
+        geometry: line
+        min_zoom: 12
+        include_when:
+          __all__:
+            - highway: [path, footway, track, bridleway, steps, cycleway]
+            - __any__:
+                sac_scale: __any__
+                mtb:scale: __any__
+                trail_visibility: __any__
+        attributes:
+          - key: highway
+            tag_value: highway
+          - key: sac_scale
+            tag_value: sac_scale
+          - key: mtb_scale
+            tag_value: mtb:scale
+          - key: trail_visibility
+            tag_value: trail_visibility

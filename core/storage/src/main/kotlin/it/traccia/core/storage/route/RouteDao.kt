@@ -11,12 +11,25 @@ interface RouteDao {
     @Query("SELECT * FROM routes ORDER BY updated_at DESC")
     fun observeAll(): Flow<List<RouteEntity>>
 
+    @Query("SELECT * FROM routes WHERE id IN (:ids)")
+    fun observeByIds(ids: Set<Long>): Flow<List<RouteEntity>>
+
     @Query("SELECT * FROM routes WHERE id = :id")
     suspend fun findById(id: Long): RouteEntity?
 
     @Upsert
     suspend fun upsert(route: RouteEntity): Long
 
+    @Query("UPDATE routes SET name = :name, updated_at = :updatedAt WHERE id = :id")
+    suspend fun rename(
+        id: Long,
+        name: String,
+        updatedAt: Long,
+    )
+
     @Delete
     suspend fun delete(route: RouteEntity)
+
+    @Query("DELETE FROM routes WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }

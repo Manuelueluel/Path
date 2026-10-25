@@ -1,0 +1,21 @@
+{
+  "virtualHost": "tiles.traccia.invalid",
+  "basemap": {
+    "tileJsonUrl": "https://tiles.openfreemap.org/planet",
+    "maxZoom": 14,
+    "attribution": "<a href=\"https://openfreemap.org\">OpenFreeMap</a> <a href=\"https://www.openmaptiles.org/\">© OpenMapTiles</a> Data from <a href=\"https://www.openstreetmap.org/copyright\">© OpenStreetMap contributors</a>"
+  },
+  "trails": {
+    "maxZoom": 14,
+    "attribution": "<a href=\"https://www.openstreetmap.org/copyright\">© OpenStreetMap contributors</a>"
+  },
+  "dem": {
+    "tileUrl": "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp",
+    "encoding": "terrarium",
+    "tileSize": 512,
+    "maxZoom": 12,
+    "attribution": "<a href=\"https://mapterhorn.com/attribution\">© Mapterhorn</a> · Copernicus DEM GLO-30 © DLR, Airbus"
+  },
+  "glyphsUrl": "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
+  "catalogUrl": "https://github.com/OWNER/traccia/releases/download/maps/catalog.json"
+}

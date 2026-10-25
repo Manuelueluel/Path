@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    api(project(":core:common"))
     api(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
 }

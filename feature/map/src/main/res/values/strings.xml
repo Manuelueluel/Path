@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="map_placeholder">La mappa arriva con la milestone M1</string>
     <string name="map_open_settings">Impostazioni</string>
+    <string name="map_open_layers">Stile e livelli della mappa</string>
+    <string name="map_center_on_me">Centra sulla mia posizione</string>
+    <string name="map_elevation_meters">%1$d m</string>
+    <string name="map_elevation_unknown">— m</string>
+    <string name="map_location_denied">Permesso posizione negato</string>
+    <string name="map_location_open_settings">Impostazioni</string>
+    <string name="map_layers_style">Stile mappa</string>
+    <string name="map_layers_overlays">Livelli</string>
+    <string name="map_layer_contours">Curve di livello</string>
+    <string name="map_layer_hillshade">Ombreggiatura del rilievo</string>
+    <string name="map_style_topo">Topografica</string>
+    <string name="map_style_topo_description">Sentieri per difficoltà, rifugi, acqua e cime</string>
+    <string name="map_style_minimal">Minimale</string>
+    <string name="map_style_minimal_description">Toni neutri, per leggere meglio la heatmap</string>
+    <string name="map_manage_offline_maps">Gestisci mappe offline</string>
+    <string name="map_layer_heatmap">Heatmap Strava</string>
+    <string name="map_heatmap_opacity">Opacità</string>
+    <string name="map_heatmap_login_needed">Per vedere la heatmap accedi con il tuo account Strava.</string>
+    <string name="map_heatmap_expired">Sessione Strava scaduta: si vedono solo le tile già salvate.</string>
+    <string name="map_heatmap_login">Accedi a Strava</string>
+    <string name="map_heatmap_login_short">Accedi</string>
+    <string name="map_heatmap_label">Heatmap</string>
+    <string name="map_heatmap_age">dati di %1$s</string>
+    <string name="map_heatmap_age_unknown">in caricamento…</string>
+    <string name="map_heatmap_refresh">Aggiorna la heatmap in quest\'area</string>
+    <string name="map_heatmap_chip_expired">Sessione Strava scaduta</string>
+    <string name="map_heatmap_chip_logged_out">Heatmap non collegata</string>
+    <string name="map_open_route">Impostazioni del percorso</string>
+    <string name="map_open_library">I miei percorsi</string>
 </resources>

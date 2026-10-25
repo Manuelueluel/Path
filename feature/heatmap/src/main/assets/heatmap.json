@@ -1,0 +1,25 @@
+{
+  "comment": "Strava changes these without notice: update here, not in code. Sport ids map the app's sports to Strava's heatmap layers.",
+  "tileUrl": "https://content-a.strava.com/identified/globalheat/{sport}/{color}/{z}/{x}/{y}.png?v=19",
+  "tileSize": 256,
+  "minZoom": 3,
+  "maxZoom": 15,
+  "loginUrl": "https://www.strava.com/login",
+  "heatmapPageUrl": "https://www.strava.com/maps/global-heatmap",
+  "sessionCookieUrl": "https://www.strava.com",
+  "requiredCookies": ["CloudFront-Key-Pair-Id", "CloudFront-Policy", "CloudFront-Signature"],
+  "policyCookie": "CloudFront-Policy",
+  "refreshAfterDays": 30,
+  "sports": [
+    { "id": "all", "strava": "all" },
+    { "id": "ride", "strava": "sport_Ride" },
+    { "id": "run", "strava": "sport_Run" },
+    { "id": "trail_run", "strava": "sport_TrailRun" },
+    { "id": "hike", "strava": "sport_Hike" },
+    { "id": "mtb", "strava": "sport_MountainBikeRide" },
+    { "id": "gravel", "strava": "sport_GravelRide" },
+    { "id": "winter", "strava": "winter" },
+    { "id": "water", "strava": "water" }
+  ],
+  "colors": ["hot", "blue", "purple", "gray", "bluered"]
+}

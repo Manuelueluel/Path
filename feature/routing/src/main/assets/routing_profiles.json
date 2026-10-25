@@ -1,0 +1,24 @@
+{
+  "comment": "BRouter profile per sport and the profile parameters behind each user option (M4.3, M4.4).",
+  "profiles": {
+    "HIKING": { "brf": "hiking-mountain", "options": {
+      "avoid_steps": { "allow_steps": "false" },
+      "avoid_climbs": { "consider_elevation": "true" } } },
+    "TRAIL_RUNNING": { "brf": "hiking-mountain", "options": {
+      "avoid_steps": { "allow_steps": "false" },
+      "avoid_climbs": { "consider_elevation": "true" } } },
+    "RUNNING": { "brf": "hiking-mountain", "params": { "hiking_routes_preference": "0" }, "options": {
+      "avoid_steps": { "allow_steps": "false" },
+      "avoid_climbs": { "consider_elevation": "true" } } },
+    "SKI_TOURING": { "brf": "hiking-mountain", "options": {
+      "avoid_steps": { "allow_steps": "false" } } },
+    "ROAD_CYCLING": { "brf": "fastbike", "options": {
+      "avoid_traffic": { "consider_traffic": "1" },
+      "avoid_steps": { "allow_steps": "false" } } },
+    "GRAVEL": { "brf": "gravel", "options": {
+      "prefer_unpaved": { "prefer_unpaved_paths": "true" },
+      "avoid_traffic": { "consider_traffic_estimate": "true" },
+      "avoid_climbs": { "avoid_steep_inclines": "true" } } },
+    "MTB": { "brf": "mtb", "options": {} }
+  }
+}

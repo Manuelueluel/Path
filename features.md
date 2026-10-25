@@ -1,6 +1,6 @@
 # features.md
 
-Funzionalità di **Traccia**, organizzate in milestone. Ogni milestone è un blocco logico che, una volta completato, lascia l'app in uno stato usabile e testabile. L'ordine delle milestone è l'ordine di sviluppo consigliato.
+Funzionalità di **Path**, organizzate in milestone. Ogni milestone è un blocco logico che, una volta completato, lascia l'app in uno stato usabile e testabile. L'ordine delle milestone è l'ordine di sviluppo consigliato.
 
 Legenda: ogni punto ha un identificativo (es. `M2.3`) da usare in commit, issue e branch.
 

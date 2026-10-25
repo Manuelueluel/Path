@@ -10,7 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 
-interface PermissionChecker {
+fun interface PermissionChecker {
     /** True when at least one of the manifest permissions is granted, or no runtime grant is needed. */
     fun isGranted(permission: AppPermission): Boolean
 }

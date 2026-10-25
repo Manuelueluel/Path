@@ -19,3 +19,5 @@ captures/
 # Map data and heatmap cache must never be committed (see CLAUDE.md)
 *.mbtiles
 *.rd5
+# Pipeline output: region packs are published as release assets, never committed.
+tools/pipeline/dist/

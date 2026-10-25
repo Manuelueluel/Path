@@ -12,6 +12,12 @@ android {
         applicationId = "it.traccia"
         versionCode = 1
         versionName = "0.1.0"
+        // Empty: use the catalogUrl of map_sources.json. Override for testing with -Ptraccia.catalogUrl=...
+        buildConfigField("String", "CATALOG_URL", "\"${providers.gradleProperty("traccia.catalogUrl").getOrElse("")}\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -30,6 +36,7 @@ dependencies {
     implementation(project(":core:geo"))
     implementation(project(":core:storage"))
     implementation(project(":core:ui"))
+    implementation(project(":core:terrain"))
 
     implementation(project(":feature:map"))
     implementation(project(":feature:offlinemaps"))
@@ -46,4 +53,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.maplibre.android)
+    implementation(libs.okhttp)
+    implementation(libs.work.runtime)
+    implementation(libs.androidx.hilt.work)
 }

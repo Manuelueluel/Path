@@ -27,7 +27,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Traccia"
+rootProject.name = "Path"
 
 include(":app")
 
@@ -35,6 +35,7 @@ include(":core:common")
 include(":core:geo")
 include(":core:storage")
 include(":core:ui")
+include(":core:terrain")
 
 include(":feature:map")
 include(":feature:offlinemaps")

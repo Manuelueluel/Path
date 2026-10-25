@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="planner_hint_start">Tocca la mappa per fissare la partenza</string>
+    <string name="planner_hint_next">Tocca la mappa per aggiungere il punto successivo</string>
+    <string name="planner_stat_distance">distanza</string>
+    <string name="planner_stat_ascent">salita</string>
+    <string name="planner_stat_descent">discesa</string>
+    <string name="planner_stat_time">tempo stimato</string>
+    <string name="planner_profile_toggle">Profilo altimetrico</string>
+    <string name="planner_profile_description">Profilo altimetrico, da %1$d a %2$d metri</string>
+    <string name="planner_profile_summary">Quota %1$d–%2$d m · pendenza max %3$d%%</string>
+    <string name="planner_steep_up">Salita ripida da %1$s a %2$s: %3$d%%</string>
+    <string name="planner_steep_down">Discesa ripida da %1$s a %2$s: %3$d%%</string>
+    <string name="planner_undo">Undo</string>
+    <string name="planner_close_loop">Chiudi anello</string>
+    <string name="planner_clear_all">Cancella tutto</string>
+    <string name="planner_cleared">Percorso cancellato</string>
+    <string name="planner_restore">Ripristina</string>
+    <string name="planner_delete_point">Cancella</string>
+    <string name="planner_new_route">Nuovo percorso</string>
+    <string name="planner_new_route_action">Inizia un nuovo percorso</string>
+    <string name="planner_sport">Sport</string>
+    <string name="planner_routing">Tracciamento</string>
+    <string name="planner_routing_follow">Segui sentieri e strade</string>
+    <string name="planner_routing_straight">Linea retta</string>
+    <string name="planner_option_avoid_steps">Evita scalinate</string>
+    <string name="planner_option_avoid_climbs">Evita salite ripide</string>
+    <string name="planner_option_avoid_traffic">Evita strade trafficate</string>
+    <string name="planner_option_prefer_unpaved">Preferisci sterrato</string>
+    <string name="planner_save">Salva</string>
+    <string name="planner_export">Esporta GPX</string>
+    <string name="planner_save_title">Salva percorso</string>
+    <string name="planner_save_name">Nome</string>
+    <string name="planner_cancel">Annulla</string>
+    <string name="planner_saved">Percorso \"%1$s\" salvato</string>
+</resources>

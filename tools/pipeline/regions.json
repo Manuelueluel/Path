@@ -1,0 +1,26 @@
+{
+  "comment": "Region packs. bbox = [west, south, east, north]; extract = Geofabrik path of the OSM source. Bounding boxes are generous on purpose: trails across regional borders stay usable.",
+  "regions": [
+    { "id": "valle-d-aosta", "name": "Valle d'Aosta", "extract": "europe/italy/nord-ovest", "bbox": [6.80, 45.46, 7.95, 45.99] },
+    { "id": "piemonte", "name": "Piemonte", "extract": "europe/italy/nord-ovest", "bbox": [6.62, 44.06, 9.22, 46.47] },
+    { "id": "liguria", "name": "Liguria", "extract": "europe/italy/nord-ovest", "bbox": [7.49, 43.75, 10.07, 44.68] },
+    { "id": "lombardia", "name": "Lombardia", "extract": "europe/italy/nord-ovest", "bbox": [8.49, 44.67, 11.43, 46.64] },
+    { "id": "trentino-alto-adige", "name": "Trentino-Alto Adige", "extract": "europe/italy/nord-est", "bbox": [10.38, 45.67, 12.48, 47.10] },
+    { "id": "veneto", "name": "Veneto", "extract": "europe/italy/nord-est", "bbox": [10.62, 44.79, 13.10, 46.68] },
+    { "id": "friuli-venezia-giulia", "name": "Friuli-Venezia Giulia", "extract": "europe/italy/nord-est", "bbox": [12.32, 45.58, 13.92, 46.65] },
+    { "id": "emilia-romagna", "name": "Emilia-Romagna", "extract": "europe/italy/nord-est", "bbox": [9.19, 43.73, 12.76, 45.14] },
+    { "id": "toscana", "name": "Toscana", "extract": "europe/italy/centro", "bbox": [9.68, 42.24, 12.37, 44.47] },
+    { "id": "umbria", "name": "Umbria", "extract": "europe/italy/centro", "bbox": [11.89, 42.36, 13.27, 43.62] },
+    { "id": "marche", "name": "Marche", "extract": "europe/italy/centro", "bbox": [12.18, 42.69, 13.92, 43.97] },
+    { "id": "lazio", "name": "Lazio", "extract": "europe/italy/centro", "bbox": [11.45, 40.78, 14.03, 42.84] },
+    { "id": "abruzzo", "name": "Abruzzo", "extract": "europe/italy/sud", "bbox": [13.02, 41.68, 14.79, 42.90] },
+    { "id": "molise", "name": "Molise", "extract": "europe/italy/sud", "bbox": [13.94, 41.36, 15.16, 42.07] },
+    { "id": "campania", "name": "Campania", "extract": "europe/italy/sud", "bbox": [13.76, 39.99, 15.81, 41.51] },
+    { "id": "puglia", "name": "Puglia", "extract": "europe/italy/sud", "bbox": [14.93, 39.79, 18.52, 42.23] },
+    { "id": "basilicata", "name": "Basilicata", "extract": "europe/italy/sud", "bbox": [15.33, 39.90, 16.87, 41.14] },
+    { "id": "calabria", "name": "Calabria", "extract": "europe/italy/sud", "bbox": [15.63, 37.91, 17.21, 40.15] },
+    { "id": "sicilia", "name": "Sicilia", "extract": "europe/italy/isole", "bbox": [11.92, 35.49, 15.65, 38.82] },
+    { "id": "sardegna", "name": "Sardegna", "extract": "europe/italy/isole", "bbox": [8.13, 38.86, 9.83, 41.31] },
+    { "id": "test-lecco", "name": "Lecco e Grigne (test)", "extract": "europe/italy/nord-ovest", "bbox": [9.25, 45.78, 9.60, 46.05] }
+  ]
+}

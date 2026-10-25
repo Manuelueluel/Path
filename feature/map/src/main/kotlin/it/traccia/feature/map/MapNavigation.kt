@@ -7,8 +7,18 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object MapRoute
 
-fun NavGraphBuilder.mapScreen(onOpenSettings: () -> Unit) {
+fun NavGraphBuilder.mapScreen(
+    onOpenSettings: () -> Unit,
+    onOpenOfflineMaps: () -> Unit,
+    onOpenStravaLogin: () -> Unit,
+    onOpenLibrary: () -> Unit,
+) {
     composable<MapRoute> {
-        MapScreen(onOpenSettings = onOpenSettings)
+        MapScreen(
+            onOpenSettings = onOpenSettings,
+            onOpenOfflineMaps = onOpenOfflineMaps,
+            onOpenStravaLogin = onOpenStravaLogin,
+            onOpenLibrary = onOpenLibrary,
+        )
     }
 }

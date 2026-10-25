@@ -32,6 +32,8 @@ internal fun Project.configureAndroid(extension: CommonExtension) {
         compileOptions.sourceCompatibility = TracciaBuild.javaVersion
         compileOptions.targetCompatibility = TracciaBuild.javaVersion
         testOptions.unitTests.all { it.useJUnitPlatform() }
+        // android.util.Log and friends become no-ops in JVM unit tests.
+        testOptions.unitTests.isReturnDefaultValues = true
     }
     configureKotlin()
     configureUnitTests()

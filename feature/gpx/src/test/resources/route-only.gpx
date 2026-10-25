@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="komoot" xmlns="http://www.topografix.com/GPX/1/1">
+  <rte>
+    <name>Giro in bici</name>
+    <rtept lat="45.80" lon="9.30"/>
+    <rtept lat="45.81" lon="9.32"/>
+    <rtept lat="45.83" lon="9.35"/>
+  </rte>
+</gpx>

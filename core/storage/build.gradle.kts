@@ -19,6 +19,7 @@ ksp {
 
 dependencies {
     api(project(":core:common"))
+    api(project(":core:geo"))
     api(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)

@@ -2,7 +2,7 @@
 
 ## Progetto
 
-**Traccia** (nome provvisorio) è un'app Android nativa per **pianificare percorsi outdoor e generare file GPX** direttamente dalla mappa, per qualsiasi sport: escursionismo, trail running, corsa, bici da strada, gravel, MTB, scialpinismo e altri.
+**Path** è un'app Android nativa per **pianificare percorsi outdoor e generare file GPX** direttamente dalla mappa, per qualsiasi sport: escursionismo, trail running, corsa, bici da strada, gravel, MTB, scialpinismo e altri.
 
 L'ispirazione è il route planner dell'app Suunto: disegni il percorso a tocchi su una mappa topografica semplice ma completa, e il tracciato si aggancia ai sentieri e alle strade. In più l'app aggiunge due cose che altrove non si trovano insieme:
 
@@ -81,6 +81,8 @@ core/
   common/            # utilità, modelli condivisi, Result/errori
   geo/               # coordinate, distanze, semplificazione tracce, quote
   storage/           # Room, accesso ai file MBTiles
+  ui/                # tema Material 3, componenti condivisi, permessi
+  terrain/           # sorgenti dati mappa, tile DEM, quote e curve di livello
 feature/
   map/               # schermata mappa, gestione layer
   offlinemaps/       # catalogo regioni, download, aggiornamento

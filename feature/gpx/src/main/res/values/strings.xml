@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gpx_export_title">Esporta GPX</string>
+    <string name="gpx_content">Contenuto</string>
+    <string name="gpx_content_track">Traccia</string>
+    <string name="gpx_content_route">Rotta</string>
+    <string name="gpx_content_both">Entrambe</string>
+    <string name="gpx_simplification">Semplificazione</string>
+    <string name="gpx_simplify_none">Nessuna · %1$d punti</string>
+    <string name="gpx_simplify_light">Leggera · %1$d punti</string>
+    <string name="gpx_simplify_medium">Media · %1$d punti</string>
+    <string name="gpx_simplify_strong">Forte · %1$d punti</string>
+    <string name="gpx_waypoints">Partenza, arrivo e punti come waypoint</string>
+    <string name="gpx_share">Condividi</string>
+    <string name="gpx_share_title">Invia GPX a…</string>
+    <string name="gpx_save_file">Salva su file</string>
+    <string name="gpx_saved">GPX salvato</string>
+    <string name="gpx_export_failed">Esportazione non riuscita</string>
+    <string name="gpx_imported">Percorso \"%1$s\" importato</string>
+    <string name="gpx_import_not_gpx">Il file non è un GPX valido</string>
+    <string name="gpx_import_empty">Il GPX non contiene tracce né rotte</string>
+    <string name="gpx_import_unreadable">Impossibile leggere il file</string>
+</resources>

@@ -7,8 +7,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SettingsRoute
 
-fun NavGraphBuilder.settingsScreen(onBack: () -> Unit) {
+fun NavGraphBuilder.settingsScreen(
+    onBack: () -> Unit,
+    onOpenOfflineMaps: () -> Unit,
+    onOpenHeatmap: () -> Unit,
+) {
     composable<SettingsRoute> {
-        SettingsScreen(onBack = onBack)
+        SettingsScreen(onBack = onBack, onOpenOfflineMaps = onOpenOfflineMaps, onOpenHeatmap = onOpenHeatmap)
     }
 }

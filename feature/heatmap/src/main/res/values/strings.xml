@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="heatmap_title">Heatmap Strava</string>
+    <string name="heatmap_back">Indietro</string>
+    <string name="heatmap_close">Chiudi</string>
+    <string name="heatmap_account">Account Strava</string>
+    <string name="heatmap_logged_out">Non collegato. Accedi con il tuo account Strava per vedere la heatmap.</string>
+    <string name="heatmap_logged_in">Collegato.</string>
+    <string name="heatmap_logged_in_until">Collegato. Accesso alle tile valido fino a %1$s; si rinnova da solo finché la sessione Strava è attiva.</string>
+    <string name="heatmap_session_expired">Sessione scaduta: la heatmap usa solo le tile già salvate. Accedi di nuovo per aggiornarla.</string>
+    <string name="heatmap_login">Accedi a Strava</string>
+    <string name="heatmap_login_again">Accedi di nuovo</string>
+    <string name="heatmap_logout">Esci</string>
+    <string name="heatmap_login_title">Accesso a Strava</string>
+    <string name="heatmap_login_hint">Accedi con email e password (l\'accesso con Google non funziona dentro le app). Path non vede la password: conserva solo i cookie di sessione, cifrati sul telefono.</string>
+    <string name="heatmap_rules">Le tile della heatmap si scaricano solo quando le guardi e restano salvate sul telefono, per l\'uso offline. Si riscaricano dopo %1$d giorni. Non vengono mai condivise né esportate.</string>
+    <string name="heatmap_cache_title">Tile salvate · %1$s</string>
+    <string name="heatmap_cache_empty">Nessuna tile salvata.</string>
+    <string name="heatmap_clear">Svuota</string>
+    <string name="heatmap_clear_all">Svuota tutto</string>
+    <string name="heatmap_sport_all">Tutti</string>
+    <string name="heatmap_sport_ride">Bici da strada</string>
+    <string name="heatmap_sport_run">Corsa</string>
+    <string name="heatmap_sport_trail_run">Trail running</string>
+    <string name="heatmap_sport_hike">Escursionismo</string>
+    <string name="heatmap_sport_mtb">MTB</string>
+    <string name="heatmap_sport_gravel">Gravel</string>
+    <string name="heatmap_sport_winter">Sport invernali</string>
+    <string name="heatmap_sport_water">Sport acquatici</string>
+    <string name="heatmap_color_hot">Caldo</string>
+    <string name="heatmap_color_blue">Blu</string>
+    <string name="heatmap_color_purple">Viola</string>
+    <string name="heatmap_color_gray">Grigio</string>
+    <string name="heatmap_color_bluered">Blu-rosso</string>
+</resources>

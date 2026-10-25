@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="library_title">I miei percorsi</string>
+    <string name="library_back">Indietro</string>
+    <string name="library_search">Cerca per nome</string>
+    <string name="library_all_sports">Tutti</string>
+    <string name="library_sort_recent">Recenti</string>
+    <string name="library_sort_name">Nome</string>
+    <string name="library_sort_distance">Distanza</string>
+    <string name="library_empty">Nessun percorso salvato. Disegnane uno sulla mappa e salvalo, oppure importa un GPX.</string>
+    <string name="library_no_match">Nessun percorso corrisponde alla ricerca.</string>
+    <string name="library_route_details">%1$s · %2$s · ↑ %3$d m · %4$s</string>
+    <string name="library_on_map">sulla mappa</string>
+    <string name="library_actions">Azioni</string>
+    <string name="library_export">Esporta GPX</string>
+    <string name="library_duplicate">Duplica</string>
+    <string name="library_copy_name">%1$s (copia)</string>
+    <string name="library_rename">Rinomina</string>
+    <string name="library_delete">Elimina</string>
+    <string name="library_delete_title">Eliminare \"%1$s\"?</string>
+    <string name="library_cancel">Annulla</string>
+    <string name="library_ok">OK</string>
+    <string name="library_import">Importa GPX</string>
+    <string name="library_imported">Percorso \"%1$s\" importato</string>
+    <string name="library_import_not_gpx">Il file non è un GPX valido</string>
+    <string name="library_import_empty">Il GPX non contiene tracce né rotte</string>
+    <string name="library_import_unreadable">Impossibile leggere il file</string>
+    <string name="library_selected">%1$d selezionati</string>
+    <string name="library_selected_route">Selezionato</string>
+    <string name="library_clear_selection">Annulla selezione</string>
+    <string name="library_show_on_map">Mostra sulla mappa</string>
+    <string name="library_hide_from_map">Togli dalla mappa</string>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_title">Mappe offline</string>
+    <string name="offline_back">Indietro</string>
+    <string name="offline_refresh">Aggiorna catalogo</string>
+    <string name="offline_section_installed">Scaricate</string>
+    <string name="offline_section_available">Disponibili</string>
+    <string name="offline_catalog_empty">Nessuna regione disponibile.</string>
+    <string name="offline_catalog_empty_offline">Catalogo non disponibile: serve la connessione per vedere le regioni scaricabili.</string>
+    <string name="offline_catalog_unavailable">Impossibile aggiornare il catalogo delle regioni</string>
+    <string name="offline_storage_full">Spazio insufficiente per scaricare la regione</string>
+    <string name="offline_storage_title">Spazio di archiviazione</string>
+    <string name="offline_storage_used">Mappe scaricate: %1$s</string>
+    <string name="offline_storage_internal">Memoria interna</string>
+    <string name="offline_storage_sd">Scheda SD</string>
+    <string name="offline_storage_free">%1$s liberi</string>
+    <string name="offline_size_and_date">%1$s · dati del %2$s</string>
+    <string name="offline_status_downloading">Download %1$d%% · %2$s di %3$s</string>
+    <string name="offline_status_paused">In pausa · %1$d%% · %2$s di %3$s</string>
+    <string name="offline_status_queued">In attesa della connessione…</string>
+    <string name="offline_update_available">Aggiornamento disponibile: dati del %1$s</string>
+    <string name="offline_error_network">Download interrotto: connessione non disponibile</string>
+    <string name="offline_error_checksum">File danneggiato durante il download</string>
+    <string name="offline_error_unavailable">Regione non più disponibile sul server</string>
+    <string name="offline_error_storage">Spazio di archiviazione esaurito</string>
+    <string name="offline_action_download">Scarica</string>
+    <string name="offline_action_pause">Pausa</string>
+    <string name="offline_action_resume">Riprendi</string>
+    <string name="offline_action_cancel">Annulla</string>
+    <string name="offline_action_retry">Riprova</string>
+    <string name="offline_action_update">Aggiorna</string>
+    <string name="offline_action_delete">Elimina</string>
+    <string name="offline_action_keep">Mantieni</string>
+    <string name="offline_delete_title">Eliminare %1$s?</string>
+    <string name="offline_delete_message">Verranno liberati %1$s. Potrai scaricarla di nuovo in seguito.</string>
+    <string name="offline_notification_channel">Download mappe</string>
+    <string name="offline_notification_title">Download %1$s</string>
+    <string name="offline_notification_progress">%1$d%% completato</string>
+</resources>
