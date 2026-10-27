@@ -24,9 +24,10 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import it.traccia.core.ui.format.LocalUnitSystem
+import it.traccia.core.ui.format.formatElevation
 import it.traccia.feature.elevation.ElevationProfile
 import it.traccia.feature.elevation.SlopeClass
-import kotlin.math.roundToInt
 
 /**
  * Elevation profile chart (M6.3): area coloured by gradient (M6.5), a marker at [highlightMeters],
@@ -45,6 +46,7 @@ fun ElevationChart(
     val markerColor = MaterialTheme.colorScheme.onSurface
     val grades = remember(profile) { profile.grades() }
     val length = profile.lengthMeters.takeIf { it > 0 } ?: 1.0
+    val units = LocalUnitSystem.current
     Canvas(
         modifier
             .fillMaxWidth()
@@ -97,7 +99,7 @@ fun ElevationChart(
 
         drawLabel(
             textMeasurer,
-            "${profile.maxElevation.roundToInt()} m",
+            formatElevation(profile.maxElevation, units),
             Offset(
                 chartWidth + 4.dp.toPx(),
                 y(profile.maxElevation) - 6.dp.toPx(),
@@ -106,7 +108,7 @@ fun ElevationChart(
         )
         drawLabel(
             textMeasurer,
-            "${profile.minElevation.roundToInt()} m",
+            formatElevation(profile.minElevation, units),
             Offset(
                 chartWidth + 4.dp.toPx(),
                 y(profile.minElevation) - 6.dp.toPx(),

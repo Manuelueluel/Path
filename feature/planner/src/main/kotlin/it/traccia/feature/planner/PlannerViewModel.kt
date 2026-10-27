@@ -8,6 +8,7 @@ import it.traccia.core.common.Sport
 import it.traccia.core.geo.GeoPoint
 import it.traccia.core.geo.distanceTo
 import it.traccia.core.geo.lengthMeters
+import it.traccia.core.storage.prefs.UserPreferencesRepository
 import it.traccia.core.storage.route.Route
 import it.traccia.core.storage.route.RouteRepository
 import it.traccia.core.storage.route.RouteSegment
@@ -25,6 +26,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
@@ -45,6 +48,7 @@ class PlannerViewModel
         private val routes: RouteRepository,
         private val drafts: DraftStore,
         private val commands: PlannerCommands,
+        private val preferences: UserPreferencesRepository,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(PlannerUiState())
         val uiState: StateFlow<PlannerUiState> = _uiState.asStateFlow()
@@ -63,7 +67,8 @@ class PlannerViewModel
         init {
             _uiState.update { it.copy(availableOptions = routingOptions.optionsFor(it.sport)) }
             viewModelScope.launch {
-                drafts.load()?.let { draft ->
+                val draft = drafts.load()
+                if (draft != null) {
                     _uiState.update {
                         it.copy(
                             route = draft.route,
@@ -75,11 +80,21 @@ class PlannerViewModel
                         )
                     }
                     onRouteChanged(saveDraft = false)
+                } else {
+                    val sport = preferences.load().defaultSport
+                    _uiState.update { it.copy(sport = sport, availableOptions = routingOptions.optionsFor(sport)) }
                 }
                 commands.openRoute.filterNotNull().collect { id ->
                     open(id)
                     commands.consumed(id)
                 }
+            }
+            // Reference speeds edited in the settings: the time estimate follows (M8.2).
+            viewModelScope.launch {
+                preferences.preferences
+                    .distinctUntilChangedBy { it.speeds }
+                    .drop(1)
+                    .collect { updateDuration() }
             }
         }
 
@@ -213,14 +228,22 @@ class PlannerViewModel
             cleared = current
             cancelAllRouting()
             _uiState.update {
-                it.copy(
-                    route = PlannedRoute(),
-                    selectedPoint = null,
-                    drag = null,
-                    isSheetOpen = false,
-                    routeId = if (keepIdentity) it.routeId else null,
-                    routeName = if (keepIdentity) it.routeName else null,
-                )
+                it
+                    .copy(
+                        route = PlannedRoute(),
+                        selectedPoint = null,
+                        drag = null,
+                        isSheetOpen = false,
+                        routeId = if (keepIdentity) it.routeId else null,
+                        routeName = if (keepIdentity) it.routeName else null,
+                    ).let { s ->
+                        if (keepIdentity) {
+                            s
+                        } else {
+                            val sport = preferences.preferences.value.defaultSport
+                            s.copy(sport = sport, availableOptions = routingOptions.optionsFor(sport))
+                        }
+                    }
             }
             onRouteChanged()
             _effects.trySend(PlannerEffect.Cleared)
@@ -321,11 +344,31 @@ class PlannerViewModel
                                     distanceMeters = distance,
                                     ascentMeters = ascent,
                                     descentMeters = descent,
-                                    durationSeconds = DurationEstimate.seconds(s.sport, distance, ascent ?: 0.0, descent ?: 0.0),
+                                    durationSeconds = estimate(s.sport, distance, ascent, descent),
                                 ),
                         )
                     }
                 }
+        }
+
+        private fun updateDuration() {
+            _uiState.update { s ->
+                val stats = s.stats ?: return@update s
+                if (stats.durationSeconds == null) return@update s
+                s.copy(
+                    stats = stats.copy(durationSeconds = estimate(s.sport, stats.distanceMeters, stats.ascentMeters, stats.descentMeters)),
+                )
+            }
+        }
+
+        private fun estimate(
+            sport: Sport,
+            distance: Double,
+            ascent: Double?,
+            descent: Double?,
+        ): Double {
+            val reference = preferences.preferences.value.speedFor(sport)
+            return DurationEstimate.seconds(sport, distance, ascent ?: 0.0, descent ?: 0.0, reference)
         }
 
         private fun scheduleDraft() {

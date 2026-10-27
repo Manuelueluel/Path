@@ -22,9 +22,10 @@ import androidx.compose.ui.unit.dp
 import it.traccia.core.geo.ScaleBarSpec
 import it.traccia.core.geo.formatCoordinates
 import it.traccia.core.geo.formatDistance
+import it.traccia.core.ui.format.LocalUnitSystem
+import it.traccia.core.ui.format.formatElevation
 import it.traccia.feature.map.CenterInfo
 import it.traccia.feature.map.R
-import kotlin.math.roundToInt
 
 /** Dark ink with a white halo: readable on any map style. */
 private val MarkInk = Color(0xFF2B2B2B)
@@ -48,7 +49,7 @@ internal fun ScaleBar(
     spec: ScaleBarSpec,
     modifier: Modifier = Modifier,
 ) {
-    val label = formatDistance(spec.meters)
+    val label = formatDistance(spec.meters, LocalUnitSystem.current)
     Column(modifier.semantics { contentDescription = label }) {
         Text(label, style = MaterialTheme.typography.labelSmall, color = MarkInk)
         Canvas(Modifier.width(spec.widthDp.dp).size(width = spec.widthDp.dp, height = 6.dp)) {
@@ -80,7 +81,7 @@ internal fun CenterReadout(
             Text(
                 text =
                     if (elevation != null) {
-                        stringResource(R.string.map_elevation_meters, elevation.roundToInt())
+                        formatElevation(elevation, LocalUnitSystem.current)
                     } else {
                         stringResource(R.string.map_elevation_unknown)
                     },

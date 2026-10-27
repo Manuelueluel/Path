@@ -68,10 +68,14 @@ echo "==> DEM (Copernicus GLO-30)"
 
 echo "==> routing segments (BRouter)"
 # 5x5 degree BRouter tiles covering the bbox; shared by neighbouring regions.
+# A tile the bbox only grazes (less than MARGIN degrees) is skipped: it would add ~100-250 MB
+# for a strip with no useful routing.
 SEGMENTS=()
 for TILE in $(python3 - "$BBOX" <<'PY'
 import math, sys
+MARGIN = 0.05
 w, s, e, n = (float(v) for v in sys.argv[1].split(","))
+w, s, e, n = w + MARGIN, s + MARGIN, e - MARGIN, n - MARGIN
 def name(lon, lat):
     return ("W%d" % -lon if lon < 0 else "E%d" % lon) + "_" + ("S%d" % -lat if lat < 0 else "N%d" % lat)
 for lat in range(math.floor(s / 5) * 5, math.ceil(n / 5) * 5, 5):
@@ -86,7 +90,10 @@ PY
     curl -fL -o "$SRC.part" "https://brouter.de/brouter/segments4/$TILE.rd5"
     mv "$SRC.part" "$SRC"
   fi
-  DST="$OUT/$TILE-$VERSION.rd5"
+  # Named after the segment's own date, not the region's: regions built from the same download
+  # share one identical file, which the app installs only once.
+  DST="$OUT/$TILE-$(date -u -r "$SRC" +%Y-%m-%d).rd5"
+  rm -f "$OUT/$TILE"-*.rd5
   ln -f "$SRC" "$DST" 2>/dev/null || cp "$SRC" "$DST"
   SEGMENTS+=("$DST")
 done

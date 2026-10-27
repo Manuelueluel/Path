@@ -7,8 +7,8 @@
     <string name="planner_stat_descent">discesa</string>
     <string name="planner_stat_time">tempo stimato</string>
     <string name="planner_profile_toggle">Profilo altimetrico</string>
-    <string name="planner_profile_description">Profilo altimetrico, da %1$d a %2$d metri</string>
-    <string name="planner_profile_summary">Quota %1$d–%2$d m · pendenza max %3$d%%</string>
+    <string name="planner_profile_description">Profilo altimetrico, da %1$s a %2$s</string>
+    <string name="planner_profile_summary">Quota %1$s–%2$s · pendenza max %3$d%%</string>
     <string name="planner_steep_up">Salita ripida da %1$s a %2$s: %3$d%%</string>
     <string name="planner_steep_down">Discesa ripida da %1$s a %2$s: %3$d%%</string>
     <string name="planner_undo">Undo</string>

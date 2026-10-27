@@ -1,5 +1,6 @@
 package it.traccia.feature.map
 
+import it.traccia.core.storage.prefs.InMemoryUserPreferences
 import it.traccia.core.storage.route.Route
 import it.traccia.core.storage.route.RouteRepository
 import it.traccia.core.storage.route.RouteSummary
@@ -63,6 +64,7 @@ class MapViewModelTest {
                 },
             heatmap = heatmap,
             routes = FakeRoutes(),
+            userPreferences = InMemoryUserPreferences(),
         )
 
     @Test

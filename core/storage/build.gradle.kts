@@ -22,6 +22,7 @@ dependencies {
     api(project(":core:geo"))
     api(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.androidx.datastore.preferences)
     ksp(libs.room.compiler)
 
     androidTestImplementation(libs.room.testing)

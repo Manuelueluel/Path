@@ -17,5 +17,5 @@
     "attribution": "<a href=\"https://mapterhorn.com/attribution\">© Mapterhorn</a> · Copernicus DEM GLO-30 © DLR, Airbus"
   },
   "glyphsUrl": "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
-  "catalogUrl": "https://github.com/OWNER/traccia/releases/download/maps/catalog.json"
+  "catalogUrl": "https://github.com/Manuelueluel/Path/releases/download/maps/catalog.json"
 }

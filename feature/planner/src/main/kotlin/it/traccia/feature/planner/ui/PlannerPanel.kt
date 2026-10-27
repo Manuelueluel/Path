@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -24,9 +25,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import it.traccia.core.ui.format.LocalUnitSystem
 import it.traccia.core.ui.format.formatDuration
+import it.traccia.core.ui.format.formatElevation
 import it.traccia.core.ui.format.formatRouteDistance
 import it.traccia.feature.elevation.ElevationProfile
 import it.traccia.feature.elevation.ui.ElevationChart
@@ -64,10 +69,11 @@ fun PlannerPanel(
                     modifier = Modifier.padding(vertical = 6.dp),
                 )
             } else {
+                val units = LocalUnitSystem.current
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Stat(formatRouteDistance(stats.distanceMeters), R.string.planner_stat_distance, Modifier.weight(1f))
-                    Stat(stats.ascentMeters?.let { "${it.roundToInt()} m" } ?: "…", R.string.planner_stat_ascent, Modifier.weight(1f))
-                    Stat(stats.descentMeters?.let { "${it.roundToInt()} m" } ?: "…", R.string.planner_stat_descent, Modifier.weight(1f))
+                    Stat(formatRouteDistance(stats.distanceMeters, units), R.string.planner_stat_distance, Modifier.weight(1f))
+                    Stat(stats.ascentMeters?.let { formatElevation(it, units) } ?: "…", R.string.planner_stat_ascent, Modifier.weight(1f))
+                    Stat(stats.descentMeters?.let { formatElevation(it, units) } ?: "…", R.string.planner_stat_descent, Modifier.weight(1f))
                     Stat(stats.durationSeconds?.let { formatDuration(it) } ?: "…", R.string.planner_stat_time, Modifier.weight(TIME_WEIGHT))
                     IconButton(onClick = { onEvent(PlannerEvent.ProfileToggled) }, enabled = state.profile != null) {
                         Icon(
@@ -100,6 +106,7 @@ private fun ProfileDetails(
     highlight: Double?,
     onEvent: (PlannerEvent) -> Unit,
 ) {
+    val units = LocalUnitSystem.current
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         ElevationChart(
             profile = profile,
@@ -108,15 +115,15 @@ private fun ProfileDetails(
             contentDescription =
                 stringResource(
                     R.string.planner_profile_description,
-                    profile.minElevation.roundToInt(),
-                    profile.maxElevation.roundToInt(),
+                    formatElevation(profile.minElevation, units),
+                    formatElevation(profile.maxElevation, units),
                 ),
         )
         Text(
             stringResource(
                 R.string.planner_profile_summary,
-                profile.minElevation.roundToInt(),
-                profile.maxElevation.roundToInt(),
+                formatElevation(profile.minElevation, units),
+                formatElevation(profile.maxElevation, units),
                 profile.maxGradePercent.roundToInt(),
             ),
             style = MaterialTheme.typography.labelMedium,
@@ -125,8 +132,8 @@ private fun ProfileDetails(
             Text(
                 stringResource(
                     if (section.gradePercent >= 0) R.string.planner_steep_up else R.string.planner_steep_down,
-                    formatRouteDistance(section.startMeters),
-                    formatRouteDistance(section.endMeters),
+                    formatRouteDistance(section.startMeters, units),
+                    formatRouteDistance(section.endMeters, units),
                     abs(section.gradePercent).roundToInt(),
                 ),
                 style = MaterialTheme.typography.labelSmall,
@@ -142,8 +149,15 @@ private fun Stat(
     @StringRes label: Int,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier) {
-        Text(value, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, maxLines = 1)
+    // Read as one item by TalkBack ("12,4 km, Distanza"); with large fonts the value shrinks instead of being cut.
+    Column(modifier.semantics(mergeDescendants = true) {}) {
+        Text(
+            value,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            autoSize = TextAutoSize.StepBased(minFontSize = MIN_STAT_SP.sp, maxFontSize = MaterialTheme.typography.titleSmall.fontSize),
+        )
         Text(
             stringResource(label),
             style = MaterialTheme.typography.labelSmall,
@@ -167,6 +181,7 @@ private fun PlannerButton(
 }
 
 private const val PANEL_ALPHA = 0.95f
+private const val MIN_STAT_SP = 9
 
 /** The duration label ("3 h 05 min") is wider than the others. */
 private const val TIME_WEIGHT = 1.2f

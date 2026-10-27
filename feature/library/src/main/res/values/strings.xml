@@ -9,7 +9,7 @@
     <string name="library_sort_distance">Distanza</string>
     <string name="library_empty">Nessun percorso salvato. Disegnane uno sulla mappa e salvalo, oppure importa un GPX.</string>
     <string name="library_no_match">Nessun percorso corrisponde alla ricerca.</string>
-    <string name="library_route_details">%1$s · %2$s · ↑ %3$d m · %4$s</string>
+    <string name="library_route_details">%1$s · %2$s · ↑ %3$s · %4$s</string>
     <string name="library_on_map">sulla mappa</string>
     <string name="library_actions">Azioni</string>
     <string name="library_export">Esporta GPX</string>
@@ -30,4 +30,24 @@
     <string name="library_clear_selection">Annulla selezione</string>
     <string name="library_show_on_map">Mostra sulla mappa</string>
     <string name="library_hide_from_map">Togli dalla mappa</string>
+    <string name="library_more">Altre opzioni</string>
+    <string name="library_backup">Backup della libreria</string>
+    <string name="library_restore">Ripristina da backup</string>
+    <string name="library_backup_file_name">path-percorsi-%1$s.zip</string>
+    <plurals name="library_backup_done">
+        <item quantity="one">Backup di %d percorso salvato</item>
+        <item quantity="other">Backup di %d percorsi salvato</item>
+    </plurals>
+    <plurals name="library_restore_done">
+        <item quantity="one">%d percorso ripristinato</item>
+        <item quantity="other">%d percorsi ripristinati</item>
+    </plurals>
+    <plurals name="library_restore_skipped">
+        <item quantity="one">%d era già presente</item>
+        <item quantity="other">%d erano già presenti</item>
+    </plurals>
+    <string name="library_restore_not_backup">Il file non contiene percorsi</string>
+    <string name="library_backup_failed">Impossibile leggere o scrivere il file</string>
+    <string name="library_open_route">apri nel planner</string>
+    <string name="library_toggle_selection">seleziona per la mappa</string>
 </resources>

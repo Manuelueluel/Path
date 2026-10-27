@@ -1,21 +1,46 @@
 package it.traccia.core.geo
 
+import it.traccia.core.common.UnitSystem
+import it.traccia.core.common.UnitSystem.Companion.METERS_PER_FOOT
+import it.traccia.core.common.UnitSystem.Companion.METERS_PER_KM
+import it.traccia.core.common.UnitSystem.Companion.METERS_PER_MILE
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToLong
 
-private const val METERS_PER_KM = 1000.0
-
-/** "500 m", "2 km", "1,5 km" (decimal separator from [locale]). */
+/** Scale bar labels: "500 m", "2 km", "1,5 km"; "500 ft", "2 mi" (decimal separator from [locale]). */
 fun formatDistance(
     meters: Double,
+    units: UnitSystem = UnitSystem.METRIC,
     locale: Locale = Locale.getDefault(),
 ): String =
-    when {
-        meters < METERS_PER_KM -> "${meters.roundToLong()} m"
-        meters % METERS_PER_KM == 0.0 -> "${(meters / METERS_PER_KM).roundToLong()} km"
-        else -> String.format(locale, "%.1f km", meters / METERS_PER_KM)
+    when (units) {
+        UnitSystem.METRIC -> round(meters, METERS_PER_KM, "m", "km", locale)
+        UnitSystem.IMPERIAL ->
+            if (meters < METERS_PER_MILE) {
+                "${(meters / METERS_PER_FOOT).roundToLong()} ft"
+            } else {
+                round(meters / METERS_PER_MILE, 1.0, "mi", "mi", locale, small = false)
+            }
     }
+
+private fun round(
+    value: Double,
+    perLarge: Double,
+    smallUnit: String,
+    largeUnit: String,
+    locale: Locale,
+    small: Boolean = true,
+): String {
+    val large = value / perLarge
+    return when {
+        small && value < perLarge -> "${value.roundToLong()} $smallUnit"
+        abs(large - large.roundToLong()) < ROUND_EPSILON -> "${large.roundToLong()} $largeUnit"
+        else -> String.format(locale, "%.1f %s", large, largeUnit)
+    }
+}
+
+private const val ROUND_EPSILON = 1e-6
 
 /** "45,86012° N  9,47011° E": 5 decimals ≈ 1 m. */
 fun formatCoordinates(

@@ -1,5 +1,6 @@
 package it.traccia.feature.elevation
 
+import it.traccia.core.common.SpeedReference
 import it.traccia.core.common.Sport
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -32,5 +33,12 @@ class DurationEstimateTest {
     @Test
     fun `road cycling is faster than hiking`() {
         assertTrue(hours(Sport.ROAD_CYCLING, 50.0, 500.0) < hours(Sport.HIKING, 50.0, 500.0))
+    }
+
+    @Test
+    fun `custom reference speeds are used`() {
+        val fast = SpeedReference(flatKmh = 5.0, ascentMh = 400.0, descentMh = 600.0)
+        // 10 km = 2 h horizontal; 400 m up = 1 h vertical -> 2 + 1/2 = 2.5 h.
+        assertEquals(2.5, DurationEstimate.seconds(Sport.HIKING, 10_000.0, 400.0, 0.0, fast) / 3600, 1e-9)
     }
 }

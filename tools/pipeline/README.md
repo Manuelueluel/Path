@@ -31,23 +31,25 @@ Le regioni sono definite in `regions.json` (id, nome, estratto Geofabrik, boundi
 
 ## Pubblicare
 
-1. Generare il catalogo indicando l'URL base dove saranno caricati i file:
+1. Generare il catalogo con l'URL base della release `maps`, escludendo la regione di test:
    ```bash
-   python3 tools/pipeline/make_catalog.py --dist tools/pipeline/dist \
-     --base-url https://github.com/<utente>/<repo>/releases/download/maps
+   python3 tools/pipeline/make_catalog.py --dist tools/pipeline/dist --exclude test-lecco \
+     --base-url https://github.com/Manuelueluel/Path/releases/download/maps
    ```
-2. Caricare `catalog.json`, tutti i `.mbtiles` e tutti i `.rd5` **in un'unica cartella piatta**, ad esempio come asset della release GitHub con tag `maps` (limite 2 GB per file; il server deve supportare le richieste `Range` per la ripresa dei download, GitHub lo fa).
-3. In `core/terrain/src/main/assets/map_sources.json` impostare `catalogUrl` sull'URL di `catalog.json`.
+   Lo script prepara `tools/pipeline/dist/upload/` con `catalog.json` e tutti i file da caricare, una sola volta ciascuno.
+2. Caricare il contenuto di `dist/upload/` come asset della release con tag `maps` (limite 2 GB per file; GitHub supporta le richieste `Range` per la ripresa dei download):
+   - **dal sito**: Releases → crea o modifica la release `maps` → trascina i file di `dist/upload/`. Per aggiornare un file già presente, prima va cancellato quello vecchio;
+   - **con GitHub CLI**: `gh release upload maps tools/pipeline/dist/upload/* --clobber`.
+   - **a lotti** (connessione lenta): `tools/pipeline/upload_regions.py veneto [altre regioni...]` carica solo i file mancanti delle regioni indicate (crea la release se non c'è), poi sostituisce `catalog.json` con queste regioni più quelle già pubblicate per intero. Il catalogo sale per ultimo, quindi l'app non vede mai regioni incomplete; se l'upload si interrompe basta rilanciare. `--dry-run` mostra cosa caricherebbe.
+3. `catalogUrl` in `core/terrain/src/main/assets/map_sources.json` punta già a `.../releases/download/maps/catalog.json`.
 
-Con GitHub CLI: `gh release upload maps tools/pipeline/dist/catalog.json tools/pipeline/dist/*/*.mbtiles tools/pipeline/dist/*/*.rd5 --clobber`.
-
-Per aggiornare una regione basta rigenerarla, rifare il catalogo e ricaricare: l'app confronta le versioni e propone l'aggiornamento.
+Per aggiornare una regione basta rigenerarla, rifare il catalogo e ricaricare: l'app confronta le versioni e propone l'aggiornamento. I segmenti `.rd5` prendono la data del download da brouter.de (rinnovato ogni settimana), non quella della regione: le regioni generate nella stessa settimana condividono lo stesso file, che l'app installa una volta sola.
 
 ## Provare senza pubblicare
 
 ```bash
 python3 tools/pipeline/make_catalog.py --dist tools/pipeline/dist --base-url http://localhost:8000
-mkdir -p /tmp/traccia-serve && ln -sf "$PWD"/tools/pipeline/dist/catalog.json "$PWD"/tools/pipeline/dist/*/*.mbtiles "$PWD"/tools/pipeline/dist/*/*.rd5 /tmp/traccia-serve/
+mkdir -p /tmp/traccia-serve && ln -sf "$PWD"/tools/pipeline/dist/upload/* /tmp/traccia-serve/
 (cd /tmp/traccia-serve && python3 -m http.server 8000)
 
 # telefono collegato via USB: la porta 8000 del telefono punta al computer

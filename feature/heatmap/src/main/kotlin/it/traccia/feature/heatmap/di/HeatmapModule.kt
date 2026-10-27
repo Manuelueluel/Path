@@ -11,6 +11,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import it.traccia.core.storage.prefs.UserPreferencesRepository
 import it.traccia.core.terrain.HeatmapTileHandler
 import it.traccia.feature.heatmap.DataStoreHeatmapSettings
 import it.traccia.feature.heatmap.Heatmap
@@ -76,7 +77,14 @@ internal abstract class HeatmapModule {
             config: HeatmapConfig,
             cache: HeatmapTileCache,
             session: StravaSession,
-        ): HeatmapTileHandler = HeatmapTileService(config, cache, session)
+            preferences: UserPreferencesRepository,
+        ): HeatmapTileHandler =
+            HeatmapTileService(
+                config,
+                cache,
+                session,
+                refreshAfterDays = { preferences.preferences.value.heatmapRefreshDays ?: config.refreshAfterDays },
+            )
 
         @Provides
         @Singleton

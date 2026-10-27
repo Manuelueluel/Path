@@ -19,6 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
@@ -27,6 +30,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import it.traccia.core.geo.GeoPoint
 import it.traccia.feature.heatmap.MapArea
 import it.traccia.feature.map.MapUiState
+import it.traccia.feature.map.R
 import it.traccia.feature.map.prefs.CameraSnapshot
 import it.traccia.feature.planner.PlannerUiState
 import org.maplibre.android.camera.CameraPosition
@@ -158,7 +162,8 @@ internal fun MapLibreMapView(
         ready?.setLocationEnabled(state.isLocationEnabled)
     }
 
-    AndroidView(factory = { mapView }, modifier = modifier)
+    val description = stringResource(R.string.map_description)
+    AndroidView(factory = { mapView }, modifier = modifier.semantics { contentDescription = description })
 }
 
 /**

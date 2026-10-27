@@ -3,6 +3,7 @@ package it.traccia.feature.heatmap.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import it.traccia.core.storage.prefs.UserPreferencesRepository
 import it.traccia.feature.heatmap.cache.HeatmapTileCache
 import it.traccia.feature.heatmap.config.HeatmapConfig
 import it.traccia.feature.heatmap.session.SessionState
@@ -39,12 +40,18 @@ class HeatmapAccountViewModel
         private val session: StravaSession,
         private val cache: HeatmapTileCache,
         private val webCookies: WebCookies,
+        private val preferences: UserPreferencesRepository,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(HeatmapAccountUiState(refreshAfterDays = config.refreshAfterDays))
         val uiState: StateFlow<HeatmapAccountUiState> = _uiState.asStateFlow()
 
         init {
             viewModelScope.launch { session.state.collect { s -> _uiState.update { it.copy(session = s) } } }
+            viewModelScope.launch {
+                preferences.preferences.collect { p ->
+                    _uiState.update { it.copy(refreshAfterDays = p.heatmapRefreshDays ?: config.refreshAfterDays) }
+                }
+            }
             reloadSizes()
         }
 

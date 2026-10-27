@@ -10,6 +10,8 @@ import it.traccia.core.storage.route.Route
 import it.traccia.core.storage.route.SegmentKind
 import it.traccia.feature.elevation.ElevationProfile
 import it.traccia.feature.elevation.SlopeClass
+import it.traccia.feature.planner.DragPreview
+import it.traccia.feature.planner.PlannedRoute
 import it.traccia.feature.planner.PlannerUiState
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.Style
@@ -43,8 +45,19 @@ class PlannerLayer {
     private var lastState: PlannerUiState? = null
     private var lastShown: List<Route> = emptyList()
 
+    /**
+     * Inputs of what each source shows now (M8.5): the state changes many times a second while
+     * scrubbing the profile or dragging a point, and re-sending a long route each time stutters.
+     */
+    private var drawnRoute: Pair<PlannedRoute, Int?>? = null
+    private var drawnDrag: DragPreview? = null
+    private var drawnSlope: ElevationProfile? = null
+
     fun install(style: Style) {
-        listOf(SRC_SHOWN, SRC_ROUTE, SRC_POINTS, SRC_MARKER).forEach { style.addSource(GeoJsonSource(it)) }
+        drawnRoute = null
+        drawnDrag = null
+        drawnSlope = null
+        listOf(SRC_SHOWN, SRC_ROUTE, SRC_DRAG, SRC_POINTS, SRC_MARKER).forEach { style.addSource(GeoJsonSource(it)) }
         style.addSource(GeoJsonSource(SRC_SLOPE, GeoJsonOptions().withLineMetrics(true)))
         // Route above everything else, but below the user position (CLAUDE.md layer order).
         val locationLayer = style.layers.firstOrNull { it.id.contains("location") }?.id
@@ -64,6 +77,14 @@ class PlannerLayer {
         // Straight fallbacks and segments being computed or dragged: dashed (M4.6).
         add(
             LineLayer(LAYER_DASHED, SRC_ROUTE).withFilter(get(PROP_DASHED)).withProperties(
+                PropertyFactory.lineColor(ROUTE_COLOR),
+                PropertyFactory.lineWidth(3.5f),
+                PropertyFactory.lineDasharray(arrayOf(2f, 1.5f)),
+            ),
+        )
+        // The two segments next to a dragged point, redrawn at every move.
+        add(
+            LineLayer(LAYER_DRAG, SRC_DRAG).withProperties(
                 PropertyFactory.lineColor(ROUTE_COLOR),
                 PropertyFactory.lineWidth(3.5f),
                 PropertyFactory.lineDasharray(arrayOf(2f, 1.5f)),
@@ -128,22 +149,60 @@ class PlannerLayer {
         val route = state.route
         val drag = state.drag
         val points = route.points.toMutableList().also { list -> drag?.let { list[it.index] = it.position } }
-        val segments =
-            route.segments.mapIndexed { i, segment ->
-                val affected = drag != null && (i == drag.index - 1 || i == drag.index)
-                when {
-                    affected || segment == null -> line(listOf(points[i], points[i + 1]), dashed = true)
-                    else -> line(segment.geometry, dashed = segment.kind == SegmentKind.FALLBACK)
-                }
-            }
-        style.getSourceAs<GeoJsonSource>(SRC_ROUTE)?.setGeoJson(FeatureCollection.fromFeatures(segments))
+        renderRoute(style, route, drag)
+        renderDrag(style, points, drag)
         style.getSourceAs<GeoJsonSource>(SRC_POINTS)?.setGeoJson(
             FeatureCollection.fromFeatures(pointFeatures(points, state.selectedPoint, route.isClosed)),
         )
         style.getSourceAs<GeoJsonSource>(SRC_MARKER)?.setGeoJson(
             FeatureCollection.fromFeatures(listOfNotNull(state.highlightPoint?.let { Feature.fromGeometry(point(it)) })),
         )
-        renderSlope(style, state.profile.takeIf { state.profileExpanded && drag == null })
+        val slope = state.profile.takeIf { state.profileExpanded && drag == null }
+        if (slope !== drawnSlope) {
+            drawnSlope = slope
+            renderSlope(style, slope)
+        }
+    }
+
+    /** Segments of the route; the ones next to a dragged point are left to [renderDrag]. */
+    private fun renderRoute(
+        style: Style,
+        route: PlannedRoute,
+        drag: DragPreview?,
+    ) {
+        // Drag index only, not position: this source changes when a drag starts or ends.
+        val key = route to drag?.index
+        if (key == drawnRoute) return
+        drawnRoute = key
+        val segments =
+            route.segments.mapIndexedNotNull { i, segment ->
+                val affected = drag != null && (i == drag.index - 1 || i == drag.index)
+                when {
+                    affected -> null
+                    segment == null -> line(listOf(route.points[i], route.points[i + 1]), dashed = true)
+                    else -> line(segment.geometry, dashed = segment.kind == SegmentKind.FALLBACK)
+                }
+            }
+        style.getSourceAs<GeoJsonSource>(SRC_ROUTE)?.setGeoJson(FeatureCollection.fromFeatures(segments))
+    }
+
+    /** The two dashed segments following a dragged point, redrawn at every move. */
+    private fun renderDrag(
+        style: Style,
+        points: List<GeoPoint>,
+        drag: DragPreview?,
+    ) {
+        if (drag == drawnDrag) return
+        drawnDrag = drag
+        val preview =
+            if (drag == null) {
+                emptyList()
+            } else {
+                listOf(drag.index - 1, drag.index)
+                    .filter { it >= 0 && it < points.lastIndex }
+                    .map { line(listOf(points[it], points[it + 1]), dashed = true) }
+            }
+        style.getSourceAs<GeoJsonSource>(SRC_DRAG)?.setGeoJson(FeatureCollection.fromFeatures(preview))
     }
 
     fun renderShown(
@@ -233,6 +292,8 @@ class PlannerLayer {
         const val SRC_MARKER = "planner-marker"
         const val SRC_SLOPE = "planner-slope"
         const val SRC_SHOWN = "shown-routes"
+        const val SRC_DRAG = "planner-drag"
+        const val LAYER_DRAG = "planner-drag"
         const val LAYER_SHOWN = "shown-routes"
         const val LAYER_CASING = "planner-casing"
         const val LAYER_LINE = "planner-line"

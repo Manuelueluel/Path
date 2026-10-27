@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import it.traccia.core.geo.MapScale
+import it.traccia.core.storage.prefs.UserPreferencesRepository
 import it.traccia.core.storage.route.RouteRepository
 import it.traccia.core.terrain.ElevationSource
 import it.traccia.core.ui.permission.AppPermission
@@ -51,6 +52,7 @@ class MapViewModel
         val contourProvider: GeometryTileProvider,
         private val heatmap: Heatmap,
         private val routes: RouteRepository,
+        private val userPreferences: UserPreferencesRepository,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(MapUiState())
         val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
@@ -181,7 +183,12 @@ class MapViewModel
             _uiState.update {
                 it.copy(
                     center = CenterInfo(event.latitude, event.longitude, elevation = null),
-                    scaleBar = MapScale.scaleBar(MapScale.metersPerDp(event.latitude, event.zoom), SCALE_BAR_MAX_WIDTH_DP),
+                    scaleBar =
+                        MapScale.scaleBar(
+                            MapScale.metersPerDp(event.latitude, event.zoom),
+                            SCALE_BAR_MAX_WIDTH_DP,
+                            userPreferences.preferences.value.units,
+                        ),
                 )
             }
         }

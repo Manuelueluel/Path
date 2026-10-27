@@ -8,4 +8,69 @@
     <string name="settings_offline_maps_description">Scarica le regioni per usare mappa, rilievo e sentieri senza rete</string>
     <string name="settings_heatmap">Heatmap Strava</string>
     <string name="settings_heatmap_description">Account Strava e tile della heatmap salvate sul telefono</string>
+
+    <string name="settings_general_section">Generale</string>
+    <string name="settings_units">Unità di misura</string>
+    <string name="settings_units_metric">Metriche (km, m)</string>
+    <string name="settings_units_imperial">Imperiali (mi, ft)</string>
+    <string name="settings_default_sport">Sport predefinito</string>
+    <string name="settings_default_sport_description">Usato per i nuovi percorsi</string>
+    <string name="settings_map_style">Stile mappa</string>
+    <string name="settings_heatmap_refresh">Aggiornamento heatmap</string>
+    <string name="settings_heatmap_refresh_description">Le tile in cache più vecchie di così vengono riscaricate quando sei online</string>
+    <plurals name="settings_days">
+        <item quantity="one">%d giorno</item>
+        <item quantity="other">%d giorni</item>
+    </plurals>
+
+    <string name="settings_speeds_section">Velocità per i tempi stimati</string>
+    <string name="settings_speed_summary">%1$s %2$s · salita %3$s %4$s</string>
+    <string name="settings_speed_summary_descent">%1$s %2$s · salita %3$s %4$s · discesa %5$s %4$s</string>
+    <string name="settings_speed_custom">personalizzata</string>
+    <string name="settings_speed_edit">Modifica velocità: %1$s</string>
+    <string name="settings_speed_flat">In piano</string>
+    <string name="settings_speed_ascent">Salita</string>
+    <string name="settings_speed_descent">Discesa</string>
+    <string name="settings_speed_invalid">Valori non plausibili: controlla i numeri inseriti</string>
+    <string name="settings_speed_reset">Predefinite</string>
+    <string name="settings_speed_save">Salva</string>
+    <string name="unit_kmh">km/h</string>
+    <string name="unit_mph">mph</string>
+    <string name="unit_mh">m/h</string>
+    <string name="unit_fth">ft/h</string>
+
+    <string name="settings_about_section">Informazioni</string>
+    <string name="settings_about">Informazioni e licenze</string>
+    <string name="settings_about_description">Versione, fonti dei dati, librerie e nota sulla heatmap</string>
+
+    <string name="about_title">Informazioni</string>
+    <string name="about_app_name">Path</string>
+    <string name="about_version">Versione %1$s</string>
+    <string name="about_description">Pianificatore di percorsi outdoor ed export GPX, offline. Open source, senza pubblicità né tracciamento.</string>
+    <string name="about_source_code">Codice sorgente</string>
+    <string name="about_heatmap_title">Heatmap Strava</string>
+    <string name="about_heatmap_note">La heatmap è di Strava e si vede solo con il tuo account Strava, dopo il login su strava.com. L\'app non salva password: usa i cookie della sessione. Le tile vengono scaricate solo per l\'area che stai guardando e restano sul telefono, con la data di download; non vengono mai esportate, condivise o incluse nei backup. Strava può cambiare o interrompere l\'accesso in qualsiasi momento: l\'app funziona anche senza heatmap.</string>
+    <string name="about_data_section">Dati delle mappe</string>
+    <string name="about_software_section">Software</string>
+    <string name="about_license">Licenza: %1$s</string>
+    <string name="about_role_osm">Strade, sentieri, rifugi e punti d\'interesse della mappa e del routing</string>
+    <string name="about_role_openmaptiles">Schema delle tile vettoriali della mappa base</string>
+    <string name="about_role_copernicus">Modello del terreno: curve di livello, ombreggiatura e quote</string>
+    <string name="about_role_natural_earth">Coste e confini alle scale più piccole</string>
+    <string name="about_role_online">Mappa base e rilievo online, quando non ci sono regioni scaricate</string>
+    <string name="about_role_brouter">Motore di routing offline e segmenti di routing</string>
+    <string name="about_role_maplibre">Visualizzazione della mappa</string>
+    <string name="about_role_planetiler">Generazione delle mappe offline</string>
+    <string name="about_role_okhttp">Download e richieste di rete</string>
+    <string name="about_role_android">Linguaggio e librerie dell\'app</string>
+
+    <string name="onboarding_title">Benvenuto in Path</string>
+    <string name="onboarding_intro">Disegna il percorso toccando la mappa: ogni tocco aggiunge un punto e il tracciato segue sentieri e strade. Poi esporta il GPX per il tuo orologio.</string>
+    <string name="onboarding_region_title">Scarica la prima regione</string>
+    <string name="onboarding_region_text">Mappa topografica, rilievo e routing funzionano senza rete una volta scaricata la regione. Puoi farlo anche più tardi dalle impostazioni.</string>
+    <string name="onboarding_region_action">Scegli una regione</string>
+    <string name="onboarding_strava_title">Heatmap Strava (facoltativa)</string>
+    <string name="onboarding_strava_text">Accedi con il tuo account Strava per vedere quali sentieri sono più frequentati. L\'app funziona benissimo anche senza.</string>
+    <string name="onboarding_strava_action">Accedi a Strava</string>
+    <string name="onboarding_skip">Vai alla mappa</string>
 </resources>

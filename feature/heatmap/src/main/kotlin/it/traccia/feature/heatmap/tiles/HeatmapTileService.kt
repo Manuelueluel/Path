@@ -28,10 +28,10 @@ class HeatmapTileService(
     private val config: HeatmapConfig,
     private val cache: HeatmapTileCache,
     private val session: HeatmapSession,
+    /** Threshold chosen in the settings (M8.1); defaults to the value of heatmap.json. */
+    private val refreshAfterDays: () -> Int = { config.refreshAfterDays },
     private val clock: () -> Long = System::currentTimeMillis,
 ) : HeatmapTileHandler {
-    private val refreshAfterMillis = TimeUnit.DAYS.toMillis(config.refreshAfterDays.toLong())
-
     override fun handle(
         chain: Interceptor.Chain,
         request: HeatmapRequest,
@@ -42,11 +42,13 @@ class HeatmapTileService(
         }
         val cached = cache.get(request.sport, request.color, request.z, request.x, request.y)
         val cookies = session.tileCookies()
-        return when (decideTileAction(cached?.downloadedAtMillis?.takeIf { it > 0 }, clock(), refreshAfterMillis, cookies != null)) {
+        return when (decideTileAction(cached?.downloadedAtMillis?.takeIf { it > 0 }, clock(), refreshAfterMillis(), cookies != null)) {
             TileAction.SERVE_CACHE, TileAction.CACHE_ONLY -> serve(chain.request(), cached)
             TileAction.FETCH -> fetch(chain, request, config.tileUrlFor(sport, request.color, request.z, request.x, request.y), cached)
         }
     }
+
+    private fun refreshAfterMillis(): Long = TimeUnit.DAYS.toMillis(refreshAfterDays().toLong())
 
     private fun fetch(
         chain: Interceptor.Chain,

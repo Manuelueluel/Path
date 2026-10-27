@@ -1,5 +1,6 @@
 package it.traccia.feature.library
 
+import android.content.Context
 import android.text.format.DateUtils
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -57,12 +58,15 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import it.traccia.core.common.Sport
 import it.traccia.core.storage.route.RouteSummary
+import it.traccia.core.ui.format.LocalUnitSystem
+import it.traccia.core.ui.format.formatElevation
 import it.traccia.core.ui.format.formatRouteDistance
 import it.traccia.core.ui.sport.label
 import it.traccia.feature.gpx.ImportError
+import it.traccia.feature.gpx.backup.BackupResult
 import it.traccia.feature.gpx.ui.GpxExportDialog
 import it.traccia.feature.library.ui.RouteThumbnail
-import kotlin.math.roundToInt
+import java.time.LocalDate
 
 @Composable
 internal fun LibraryScreen(
@@ -76,11 +80,20 @@ internal fun LibraryScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             if (uri != null) viewModel.onEvent(LibraryEvent.Import(uri))
         }
+    val backupLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(ZIP)) { uri ->
+            if (uri != null) viewModel.onEvent(LibraryEvent.BackupTo(uri))
+        }
+    val restoreLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            if (uri != null) viewModel.onEvent(LibraryEvent.RestoreFrom(uri))
+        }
     LaunchedEffect(viewModel) {
         viewModel.effects.collect { effect ->
             when (effect) {
                 LibraryEffect.BackToMap -> onBack()
                 is LibraryEffect.Imported -> snackbar.showSnackbar(context.getString(R.string.library_imported, effect.name))
+                is LibraryEffect.Backup -> snackbar.showSnackbar(backupMessage(context, effect.result))
                 is LibraryEffect.ImportFailed ->
                     snackbar.showSnackbar(
                         context.getString(
@@ -100,6 +113,8 @@ internal fun LibraryScreen(
         onEvent = viewModel::onEvent,
         // Many apps share GPX as generic XML or binary data.
         onImport = { importLauncher.launch(arrayOf("application/gpx+xml", "application/xml", "text/xml", "application/octet-stream")) },
+        onBackup = { backupLauncher.launch(context.getString(R.string.library_backup_file_name, LocalDate.now().toString())) },
+        onRestore = { restoreLauncher.launch(arrayOf(ZIP, "application/x-zip-compressed", "application/octet-stream")) },
         onBack = onBack,
     )
     state.exporting?.let { route ->
@@ -114,6 +129,8 @@ private fun LibraryContent(
     snackbar: SnackbarHostState,
     onEvent: (LibraryEvent) -> Unit,
     onImport: () -> Unit,
+    onBackup: () -> Unit,
+    onRestore: () -> Unit,
     onBack: () -> Unit,
 ) {
     Scaffold(
@@ -144,10 +161,18 @@ private fun LibraryContent(
                         TextButton(
                             onClick = { onEvent(LibraryEvent.ShowSelectionOnMap) },
                         ) { Text(stringResource(R.string.library_show_on_map)) }
-                    } else if (state.shownOnMap.isNotEmpty()) {
-                        TextButton(
-                            onClick = { onEvent(LibraryEvent.HideShownRoutes) },
-                        ) { Text(stringResource(R.string.library_hide_from_map)) }
+                    } else {
+                        if (state.shownOnMap.isNotEmpty()) {
+                            TextButton(
+                                onClick = { onEvent(LibraryEvent.HideShownRoutes) },
+                            ) { Text(stringResource(R.string.library_hide_from_map)) }
+                        }
+                        BackupMenu(
+                            enabled = !state.isBackingUp,
+                            canBackup = state.totalCount > 0,
+                            onBackup = onBackup,
+                            onRestore = onRestore,
+                        )
                     }
                 },
             )
@@ -164,7 +189,7 @@ private fun LibraryContent(
         snackbarHost = { SnackbarHost(snackbar) },
     ) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
-            if (state.isImporting) LinearProgressIndicator(Modifier.fillMaxWidth())
+            if (state.isImporting || state.isBackingUp) LinearProgressIndicator(Modifier.fillMaxWidth())
             Filters(state, onEvent)
             if (state.routes.isEmpty()) {
                 Text(
@@ -273,7 +298,9 @@ private fun RouteRow(
     ListItem(
         modifier =
             Modifier.combinedClickable(
+                onClickLabel = stringResource(if (selecting) R.string.library_toggle_selection else R.string.library_open_route),
                 onClick = { if (selecting) onEvent(LibraryEvent.ToggleSelection(route.id)) else onEvent(LibraryEvent.Open(route.id)) },
+                onLongClickLabel = stringResource(R.string.library_toggle_selection),
                 onLongClick = { onEvent(LibraryEvent.ToggleSelection(route.id)) },
             ),
         leadingContent = {
@@ -294,8 +321,8 @@ private fun RouteRow(
                 stringResource(
                     R.string.library_route_details,
                     stringResource(route.sport.label()),
-                    formatRouteDistance(route.distanceMeters),
-                    route.ascentMeters.roundToInt(),
+                    formatRouteDistance(route.distanceMeters, LocalUnitSystem.current),
+                    formatElevation(route.ascentMeters, LocalUnitSystem.current),
                     DateUtils.getRelativeTimeSpanString(route.updatedAtMillis).toString(),
                 ) + if (shown) " · " + stringResource(R.string.library_on_map) else "",
             )
@@ -346,3 +373,54 @@ private fun RenameDialog(
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.library_cancel)) } },
     )
 }
+
+@Composable
+private fun BackupMenu(
+    enabled: Boolean,
+    canBackup: Boolean,
+    onBackup: () -> Unit,
+    onRestore: () -> Unit,
+) {
+    var open by remember { mutableStateOf(false) }
+    Box {
+        IconButton(onClick = { open = true }, enabled = enabled) {
+            Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.library_more))
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.library_backup)) },
+                enabled = canBackup,
+                onClick = {
+                    open = false
+                    onBackup()
+                },
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.library_restore)) },
+                onClick = {
+                    open = false
+                    onRestore()
+                },
+            )
+        }
+    }
+}
+
+private fun backupMessage(
+    context: Context,
+    result: BackupResult,
+): String =
+    when (result) {
+        is BackupResult.Exported -> context.resources.getQuantityString(R.plurals.library_backup_done, result.count, result.count)
+        is BackupResult.Restored ->
+            if (result.skipped == 0) {
+                context.resources.getQuantityString(R.plurals.library_restore_done, result.count, result.count)
+            } else {
+                context.resources.getQuantityString(R.plurals.library_restore_done, result.count, result.count) + " · " +
+                    context.resources.getQuantityString(R.plurals.library_restore_skipped, result.skipped, result.skipped)
+            }
+        BackupResult.NotABackup -> context.getString(R.string.library_restore_not_backup)
+        BackupResult.Failed -> context.getString(R.string.library_backup_failed)
+    }
+
+private const val ZIP = "application/zip"

@@ -10,6 +10,7 @@ import it.traccia.core.storage.route.RouteRepository
 import it.traccia.core.storage.route.RouteSummary
 import it.traccia.feature.gpx.ImportError
 import it.traccia.feature.gpx.ImportResult
+import it.traccia.feature.gpx.backup.BackupResult
 import it.traccia.feature.planner.PlannerCommands
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -35,6 +36,8 @@ data class LibraryUiState(
     val deleting: RouteSummary? = null,
     val exporting: Route? = null,
     val isImporting: Boolean = false,
+    /** Backup or restore of the whole library running (M8.6). */
+    val isBackingUp: Boolean = false,
 ) {
     val isSelecting: Boolean get() = selection.isNotEmpty()
 }
@@ -94,6 +97,14 @@ sealed interface LibraryEvent {
     data class Import(
         val uri: Uri,
     ) : LibraryEvent
+
+    data class BackupTo(
+        val uri: Uri,
+    ) : LibraryEvent
+
+    data class RestoreFrom(
+        val uri: Uri,
+    ) : LibraryEvent
 }
 
 sealed interface LibraryEffect {
@@ -106,6 +117,10 @@ sealed interface LibraryEffect {
     data class ImportFailed(
         val reason: ImportError,
     ) : LibraryEffect
+
+    data class Backup(
+        val result: BackupResult,
+    ) : LibraryEffect
 }
 
 /** Saved routes (M7.6 - M7.9). */
@@ -116,6 +131,7 @@ class LibraryViewModel
         private val routes: RouteRepository,
         private val planner: PlannerCommands,
         private val importer: RouteImporter,
+        private val backup: RouteBackup,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(LibraryUiState())
         val uiState: StateFlow<LibraryUiState> = _uiState.asStateFlow()
@@ -176,6 +192,8 @@ class LibraryViewModel
                     }
                 LibraryEvent.DialogDismissed -> _uiState.update { it.copy(renaming = null, deleting = null, exporting = null) }
                 is LibraryEvent.Import -> import(event.uri)
+                is LibraryEvent.BackupTo -> runBackup { backup.export(event.uri) }
+                is LibraryEvent.RestoreFrom -> runBackup { backup.restore(event.uri) }
             }
         }
 
@@ -206,6 +224,16 @@ class LibraryViewModel
             }
         }
 
+        private fun runBackup(block: suspend () -> BackupResult) {
+            if (_uiState.value.isBackingUp) return
+            _uiState.update { it.copy(isBackingUp = true) }
+            viewModelScope.launch {
+                val result = block()
+                _uiState.update { it.copy(isBackingUp = false) }
+                _effects.send(LibraryEffect.Backup(result))
+            }
+        }
+
         private fun update(transform: LibraryUiState.() -> LibraryUiState) {
             _uiState.update(transform)
             refilter()
@@ -219,4 +247,11 @@ class LibraryViewModel
 /** GPX import as seen by the library (the real one is [it.traccia.feature.gpx.GpxImporter]). */
 fun interface RouteImporter {
     suspend fun import(uri: Uri): ImportResult
+}
+
+/** Whole-library archive (the real one is [it.traccia.feature.gpx.backup.LibraryBackup]). */
+interface RouteBackup {
+    suspend fun export(uri: Uri): BackupResult
+
+    suspend fun restore(uri: Uri): BackupResult
 }

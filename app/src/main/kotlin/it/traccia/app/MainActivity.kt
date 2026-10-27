@@ -8,14 +8,25 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import it.traccia.app.navigation.TracciaNavHost
+import it.traccia.core.storage.prefs.UserPreferencesRepository
+import it.traccia.core.ui.format.LocalUnitSystem
 import it.traccia.core.ui.theme.TracciaTheme
 import it.traccia.feature.gpx.GpxImporter
 import it.traccia.feature.gpx.ImportError
 import it.traccia.feature.gpx.ImportResult
 import it.traccia.feature.planner.PlannerCommands
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import it.traccia.feature.gpx.R as GpxR
@@ -28,12 +39,24 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var plannerCommands: PlannerCommands
 
+    @Inject
+    lateinit var userPreferences: UserPreferencesRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val units by remember { userPreferences.preferences.map { it.units } }
+                .collectAsStateWithLifecycle(userPreferences.preferences.value.units)
+            // Decided once per task: the stored flag must be read before choosing the first screen.
+            var showOnboarding by rememberSaveable { mutableStateOf<Boolean?>(null) }
+            LaunchedEffect(Unit) {
+                if (showOnboarding == null) showOnboarding = !userPreferences.load().onboardingDone
+            }
             TracciaTheme {
-                TracciaNavHost()
+                CompositionLocalProvider(LocalUnitSystem provides units) {
+                    showOnboarding?.let { TracciaNavHost(startWithOnboarding = it) }
+                }
             }
         }
         // Only on a fresh start: after a configuration change the intent was already handled.

@@ -1,5 +1,6 @@
 package it.traccia.core.geo
 
+import it.traccia.core.common.UnitSystem
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -34,9 +35,18 @@ class MapScaleTest {
 
     @Test
     fun `distance formatting`() {
-        assertEquals("200 m", formatDistance(200.0, Locale.ITALY))
-        assertEquals("2 km", formatDistance(2000.0, Locale.ITALY))
-        assertEquals("1,5 km", formatDistance(1500.0, Locale.ITALY))
+        assertEquals("200 m", formatDistance(200.0, locale = Locale.ITALY))
+        assertEquals("2 km", formatDistance(2000.0, locale = Locale.ITALY))
+        assertEquals("1,5 km", formatDistance(1500.0, locale = Locale.ITALY))
+    }
+
+    @Test
+    fun `imperial scale bar uses round feet below a mile and round miles above`() {
+        val feet = MapScale.scaleBar(metersPerDp = 3.0, maxWidthDp = 100f, units = UnitSystem.IMPERIAL)
+        assertEquals("500 ft", formatDistance(feet.meters, UnitSystem.IMPERIAL, Locale.ROOT))
+        val miles = MapScale.scaleBar(metersPerDp = 50.0, maxWidthDp = 100f, units = UnitSystem.IMPERIAL)
+        assertEquals("2 mi", formatDistance(miles.meters, UnitSystem.IMPERIAL, Locale.ROOT))
+        assertTrue(miles.widthDp <= 100f)
     }
 
     @Test

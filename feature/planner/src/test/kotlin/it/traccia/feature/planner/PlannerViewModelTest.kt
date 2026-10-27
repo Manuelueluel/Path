@@ -2,8 +2,11 @@ package it.traccia.feature.planner
 
 import it.traccia.core.common.AppError
 import it.traccia.core.common.AppResult
+import it.traccia.core.common.SpeedReference
 import it.traccia.core.common.Sport
 import it.traccia.core.geo.GeoPoint
+import it.traccia.core.storage.prefs.InMemoryUserPreferences
+import it.traccia.core.storage.prefs.UserPreferences
 import it.traccia.core.storage.route.Route
 import it.traccia.core.storage.route.RouteRepository
 import it.traccia.core.storage.route.RouteSegment
@@ -48,6 +51,7 @@ class PlannerViewModelTest {
     private val repository = FakeRepository()
     private val drafts = FakeDrafts()
     private val commands = PlannerCommands()
+    private val preferences = InMemoryUserPreferences(UserPreferences(defaultSport = Sport.MTB))
 
     @BeforeEach
     fun setUp() = Dispatchers.setMain(dispatcher)
@@ -72,6 +76,7 @@ class PlannerViewModelTest {
                 routes = repository,
                 drafts = drafts,
                 commands = commands,
+                preferences = preferences,
             )
         advanceUntilIdle()
         return vm
@@ -82,6 +87,38 @@ class PlannerViewModelTest {
             ?: error("no track")
 
     private fun PlannerViewModel.tap(vararg points: GeoPoint) = points.forEach { onEvent(PlannerEvent.MapTapped(it)) }
+
+    @Test
+    fun `a fresh planner and a new route start with the default sport`() =
+        runTest(dispatcher) {
+            val vm = viewModel()
+            assertEquals(Sport.MTB, vm.uiState.value.sport)
+            vm.onEvent(PlannerEvent.SportSelected(Sport.RUNNING))
+            vm.tap(a, b)
+            advanceUntilIdle()
+            vm.onEvent(PlannerEvent.NewRoute)
+            advanceUntilIdle()
+            assertEquals(Sport.MTB, vm.uiState.value.sport)
+        }
+
+    @Test
+    fun `changing the reference speeds updates the time estimate`() =
+        runTest(dispatcher) {
+            val vm = viewModel()
+            vm.tap(a, b)
+            advanceUntilIdle()
+            val before =
+                vm.uiState.value.stats
+                    ?.durationSeconds ?: error("no estimate")
+            preferences.update { p ->
+                p.copy(speeds = mapOf(Sport.MTB to SpeedReference.defaultFor(Sport.MTB).copy(flatKmh = 24.0)))
+            }
+            advanceUntilIdle()
+            val after =
+                vm.uiState.value.stats
+                    ?.durationSeconds ?: error("no estimate")
+            assertTrue(after < before)
+        }
 
     @Test
     fun `taps draw a routed line`() =
